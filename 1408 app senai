@@ -1,0 +1,66 @@
+import streamlit as st
+import database as db
+
+import base64
+
+db.criar_tabela()
+
+st.title("Site com wallpaper maneiro")
+st.header("Esse é o cabeçalho")
+st.subheader("Esse é o cabeçalho menor")
+
+with st.form("nome_do_formulario"):
+    nome = st.text_input("Insira o nome do aluno")
+    idade = st.number_input("Insira o idade do aluno", value=50)
+    data = st.date_input("Insira a data de nascimento", value="today")
+    nota = st.number_input("Insira a nota do aluno", value=0.0, step=0.5, min_value= 0.0, max_value=10.0)
+    enviado = st.form_submit_button("Enviar")
+    # declaramos as variáveis que vão receber os valores que o usuário vai preencher,
+    # oq ele vai digitar, oq ele vai clicar, oq ele vai interagir.
+    #através do if associado ao botão, a gnt consegue pegar
+    # oq o usuário digitou, oq ele clicou, oq ele interagiu, oq ele preencheu e apresentar na tela.
+if enviado:
+    conn = db.conectar()
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO alunos (nome, idade, nota) VALUES (?, ?, ?)", (nome, idade, nota))
+    conn.commit()
+    conn.close()
+
+#else: 
+
+
+
+
+    
+
+    #st.write("Resultado:")
+    #st.write(f"Nome: {nome}")
+    #st.write(f"Número: {numero}")
+    #st.write(f"Data: {data}")
+    #st.write(f"Nota: {nota}")  
+
+
+
+
+
+
+    #isso aqui é o site, aq são os campos que vão aparecer no site, o que o
+    #usuário vai ver, oq ele vai preencher, oq ele vai clicar, oq ele vai interagir.
+    #cada st é o streamlit, oq ele vai mostrar na tela, oq ele vai renderizar na tela,
+    #oq ele vai exibir na tela.
+    #um método é aquilo que abre e fecha os parenteses, oq ele vai executar, oq ele vai rodar, 
+    #oq ele vai fazer, oq ele vai processar.
+
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-image: url("https://cdn.wallpapersafari.com/46/69/Ib7BH1.jpg");
+        background-size: cover;
+    }
+    """,
+    unsafe_allow_html=True,
+)
+
+#assim colocamos um wallpaper de fundo no site, oq o usuário vai ver.
