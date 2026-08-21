@@ -1,0 +1,61 @@
+import sqlite3
+from turtle import st
+
+def conectar():
+    conn = sqlite3.connect("condominio.db")
+    return conn
+
+def create_table_visitante():
+    conn = conectar()
+    cursor = conn.cursor()
+    cursor.execute("""
+      CREATE TABLE IF NOT EXISTS visitante(
+        cpf TEXT (14) PRIMARY KEY,
+        nome TEXT (150) NOT NULL,
+        idade INTEGER NOT NULL
+        )
+     """)
+    conn.commit()
+    conn.close()
+
+def create_table_apartamento():
+    conn = conectar()
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS apartamento(
+            cpf TEXT (14) PRIMARY KEY,
+            numero INTEGER,
+            bloco TEXT (1),
+            FOREIGN KEY (cpf) REFERENCES visitante(cpf)     
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+def add_data (nome: str, cpf, idade, numero, bloco):
+    if nome.strip() != "":
+        return ("Não pode deixar informção em branco") 
+       
+    else:
+        conn = conectar()
+        cursor = conn.cursor()
+                
+        cursor.execute ("INSERT INTO visitante(nome, cpf, idade) values (?, ?, ?)" , (nome, cpf, idade)) 
+        cursor.execute("INSERT INTO apartamento(cpf, numero, bloco) values (?, ?, ?)" , (cpf, numero, bloco))
+            
+        conn.commit()
+        conn.close()
+            
+        return ("Cadastro concluído com sucesso")
+
+def delete_visitante(cpf):
+        conn = conectar()
+        cursor = conn.cursor()
+
+        cursor.execute("DELETE FROM visitante WHERE cpf = ?", (cpf,))
+        cursor.execute("DELETE FROM apartamento WHERE cpf = ?", (cpf,))
+
+        conn.commit()
+        conn.close()
+        return f"Você com o cpf {cpf} pode ir embora, vai com Deus!"
+    
