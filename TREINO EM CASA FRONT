@@ -1,0 +1,31 @@
+import streamlit as st
+import database as db
+
+import base64 
+
+db.create_table_apartamento()
+db.create_table_visitante()
+
+st.title ("Condomínio Boa Paz")
+
+with st.form("Cadastro de Visitantes"):
+    st.subheader("Cadastro do Visitante")
+    cpf = st.text_input("CPF do Visitante")
+    nome = st.text_input("Nome do Visitante")
+    idade = st.number_input("Idade do Visitante", min_value=18, max_value=150)
+    numero = st.number_input("Número do apartamento visitado",min_value=1, max_value=100)
+    bloco = st.selectbox("Bloco do apartamento visitado", ["A", "B", "C", "D"])
+
+    submit_button = st.form_submit_button("Cadastrar Visitante")
+
+if submit_button: 
+    msg = db.add_data(cpf, nome, idade, numero, bloco)
+    st.warning(msg)
+
+with st.form("deletar_visitante"):
+    cpf = st.text_input("CPF do visitante",)
+    deletar = st.form_submit_button("Deletar Visitante") 
+
+if deletar:
+    msg = db.delete_visitante(cpf)
+    st.success(msg)
